@@ -1,0 +1,6 @@
+export interface Project { id: string; name: string; client: string; category: string; description: string; services: string[]; theme: string; }
+export const sampleProjects: Project[] = [
+ {id:'commerce',name:'A considered shopping experience',client:'Fictional retail brand',category:'Web Development',description:'A sample e-commerce direction connecting a clear product catalogue, mobile shopping experience and a simple customer journey. This is a concept, not completed client work.',services:['E-commerce design','Product catalogue','Responsive UI'],theme:'commerce'},
+ {id:'brand',name:'A brand with room to grow',client:'Fictional hospitality brand',category:'Branding',description:'A sample visual identity direction for a hospitality business, designed to carry consistently across print, digital and social touchpoints. No client endorsement or performance results are claimed.',services:['Brand identity','Art direction','Graphic design'],theme:'brand'},
+ {id:'campaign',name:'Content that starts a conversation',client:'Fictional lifestyle brand',category:'Social Media',description:'A sample social content system with adaptable campaign layouts and a consistent visual voice. This is an illustrative design exercise, not a live campaign.',services:['Social strategy','Content creation','Campaign design'],theme:'campaign'},
+];

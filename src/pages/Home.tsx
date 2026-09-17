@@ -1,6 +1,10 @@
 import { ArrowDown, Check } from 'lucide-react';
 import { ButtonLink, Container } from '../components/ui';
-import { DigitalPreview, FinalCTA, PartnershipSection, ServicesSection } from '../components/HomeSections';
+import { DigitalPreview, FinalCTA, ServicesSection } from '../components/HomeSections';
+
+import { FeaturedProjects, InsightsSection, PricingSection, ProcessSection, ValueSection, WebsiteShowcase, WhySection } from '../components/GrowthSections';
+
+import { Testimonials } from '../components/Testimonials';
 
 export default function Home() {
   return <>
@@ -15,8 +19,15 @@ export default function Home() {
       <div className="corporate-hero-bottom"><span>Based in Kigali, Rwanda. <strong>Built for your ambition.</strong></span><a href="#expertise">Discover what we do <ArrowDown size={15}/></a></div>
     </Container></section>
     <div className="capabilities-strip"><Container><span>STRATEGY</span><i/><span>CREATIVITY</span><i/><span>MARKETING</span><i/><span>TECHNOLOGY</span><i/><span>DATA & INSIGHTS</span></Container></div>
+    <ValueSection/>
     <div id="expertise"><ServicesSection/></div>
-    <PartnershipSection/>
+    <WhySection/>
+    <WebsiteShowcase/>
+    <FeaturedProjects/>
+    <PricingSection/>
+    <ProcessSection/>
+    <Testimonials/>
+    <InsightsSection/>
     <FinalCTA/>
   </>;
 }

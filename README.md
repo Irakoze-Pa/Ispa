@@ -1,6 +1,6 @@
-# ISPA Digital — Phase 1
+# ISPA Digital — Phases 1–2
 
-React, Vite, TypeScript, Tailwind CSS, React Router and Lucide foundation. Manrope typography with an orange accent with gray and white surfaces. The foundation now includes a corporate homepage refresh and the supplied ISPA Digital logo. This is not a production launch; secondary pages and backend features remain staged.
+React, Vite, TypeScript, Tailwind CSS, React Router and Lucide foundation. Manrope typography with an orange accent with gray and white surfaces. The responsive homepage includes the supplied ISPA Digital logo, services, value proposition, web showcase, sample project dialogs, all marketing and web packages, an interactive five-step process and readable insights. This is not a production launch; secondary pages and backend features remain staged.
 
 ## Run
 
@@ -16,12 +16,12 @@ Use Node.js 20.19+ or 22.12+. Run `npm install`, copy `.env.example` to `.env` i
 - `server/src`: reserved for the later modular Express backend
 - `public`: future static assets
 
-All requested public routes resolve, including service routes and article previews. Unknown routes show 404. Admin functionality is not exposed. Mobile navigation supports Escape, a focus trap and scroll locking. WhatsApp appears only when a valid configured number is supplied; no contact details, client results or testimonials are invented.
+All requested public routes resolve. Secondary pages are still placeholders pending their scheduled phases. Unknown routes show 404. Admin functionality is not exposed. Mobile navigation supports Escape, a focus trap and scroll locking. WhatsApp appears only when a valid configured number is supplied; no contact details, client results or testimonials are invented.
 
 ## Phase boundaries
 
 1. Foundation (current): design system, shared shell, routing, UI primitives.
-2. Homepage: complete the remaining brief sections (showcase, sample portfolio, packages, process and insights). The corporate hero, core expertise, partnership and CTA are now in place.
+2. Homepage (complete): full homepage flow with interactive sample projects, process and insights. Testimonials stay hidden until real approved feedback is added.
 3–5. Services, sample portfolio and packages.
 6. Validated contact/quote forms, Express API and MongoDB persistence.
 7. Blog, per-page metadata, canonical URLs, structured data and sitemap.
@@ -34,3 +34,7 @@ Production hosting must rewrite non-asset frontend routes to `index.html`. Set `
 ## Brand refresh
 
 The supplied `public/images/ispa-logo.png` is preserved as provided. CSS frames the logo for the shared navbar, mobile menu and footer without changing the artwork. Bright orange highlights and buttons pair with charcoal text, gray surfaces and white backgrounds. Darker orange is used for small text readability. The hero workspace is labeled as an illustrative concept and contains no client results.
+
+## Homepage data
+
+Package data lives in `src/data/packages.ts`; sample concepts live in `src/data/projects.ts`. Genuine feedback can be added to `src/data/testimonials.ts`. Package CTAs retain the selection in the quote URL for integration in Phase 6. The full blog and article routes are implemented in Phase 7; homepage insights are currently readable in accessible dialogs. All concept artwork is lightweight HTML/CSS and SVG, without remote image requests.

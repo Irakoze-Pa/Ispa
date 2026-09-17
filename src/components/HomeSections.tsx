@@ -1,16 +1,21 @@
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, BarChart3, Check, Code2, Megaphone, Palette, Target } from 'lucide-react';
+import { ArrowUpRight, BarChart3, Check, Code2, Megaphone, Palette, Target, Search, ShoppingBag, Camera, MessagesSquare } from 'lucide-react';
 import { ButtonLink, Container, SectionHeader } from './ui';
 
 const offerings = [
-  { icon: Megaphone, title: 'Digital Marketing', slug: 'digital-marketing', text: 'Bring your business closer to the right audience with a clear strategy, targeted campaigns and measurable objectives.' },
-  { icon: Palette, title: 'Branding & Content', slug: 'branding', text: 'Make every touchpoint count with a distinctive identity, thoughtful design and content that tells your story.' },
-  { icon: Code2, title: 'Web Development', slug: 'web-development', text: 'Turn your digital presence into a business asset with fast, responsive websites and scalable web applications.' },
+ {icon:Megaphone,title:'Digital Marketing',slug:'digital-marketing',text:'Strategy-driven campaigns designed to increase visibility, engagement and customer acquisition.'},
+ {icon:MessagesSquare,title:'Social Media Management',slug:'social-media',text:'Professional planning, content publishing and community management for a consistent presence.'},
+ {icon:Camera,title:'Content Creation',slug:'content-creation',text:'Graphics, photography, videos, reels and branded content that bring your story to life.'},
+ {icon:Code2,title:'Website Development',slug:'web-development',text:'Modern, responsive and conversion-focused websites built around your business.'},
+ {icon:ShoppingBag,title:'E-commerce Development',slug:'ecommerce',text:'Online stores with product catalogues, customer accounts, orders and management tools.'},
+ {icon:Search,title:'SEO',slug:'seo',text:'Improve search visibility and connect with customers actively looking for your services.'},
+ {icon:Palette,title:'Branding & Graphic Design',slug:'branding',text:'A cohesive brand identity and professional marketing materials for every touchpoint.'},
+ {icon:Target,title:'Paid Advertising',slug:'digital-marketing',text:'Meta Ads and Google Ads campaign management focused on measurable business objectives.'},
 ];
 
 export function ServicesSection() {
   return <section className="corporate-section"><Container>
-    <div className="section-heading-row"><SectionHeader eyebrow="OUR EXPERTISE" title="Everything connects. So should your digital strategy.">From the first impression to the next conversion, we bring your brand, marketing and technology together.</SectionHeader><Link className="text-link" to="/services">Explore all services <ArrowUpRight size={18}/></Link></div>
+    <div className="section-heading-row"><SectionHeader eyebrow="OUR EXPERTISE" title="Everything your business needs to grow online.">From the first impression to the next conversion, we bring your brand, marketing and technology together.</SectionHeader><Link className="text-link" to="/services">Explore all services <ArrowUpRight size={18}/></Link></div>
     <div className="expertise-grid">{offerings.map(({icon: Icon, title, slug, text}, index) => <Link className="expertise-card" key={slug} to={`/services/${slug}`}><div className="expertise-top"><span className="service-icon"><Icon size={25}/></span><span className="service-number">0{index + 1}</span></div><h3>{title}</h3><p>{text}</p><span className="card-link">Discover the service <ArrowUpRight size={18}/></span></Link>)}</div>
   </Container></section>;
 }

@@ -18,3 +18,15 @@ Later phases must validate functional forms, APIs, MongoDB storage, finalized SE
 - Corporate homepage replaces development-focused messaging with client-facing service, partnership and CTA sections.
 - Hero chart is clearly labeled as an illustration, with no fabricated client metrics.
 - Updated styling reviewed in desktop and mobile browser layouts; no 390px horizontal overflow.
+
+## Phase 2 — Homepage
+
+- TypeScript and production build pass after the completed homepage implementation.
+- Homepage flow includes value proposition, eight services, six agency differentiators, browser/device showcase, three sample concepts, four marketing packages, four website packages, five-step process, insights and final CTA.
+- Testimonials have a reusable component and typed data structure; the empty section is hidden.
+- Project details open in a native modal dialog with sample status, fictional client label and services.
+- Selecting Grow changes the process detail and next-step control.
+- Insight dialogs display the full homepage editorial copy and close correctly.
+- Business Growth CTA navigates to `/request-quote?package=Business%20Growth`.
+- Browser review at 390px mobile, 768px tablet and 1280px desktop; document width matches each viewport. Mobile package cards and device showcase reviewed visually.
+- Secondary routes remain scheduled placeholders. No enquiry or quote submission is simulated.
