@@ -1,6 +1,6 @@
 # ISPA Digital — Phase 1
 
-React, Vite, TypeScript, Tailwind CSS, React Router and Lucide foundation. Manrope typography with an emerald accent. This is a foundation preview, not the complete homepage or a production launch.
+React, Vite, TypeScript, Tailwind CSS, React Router and Lucide foundation. Manrope typography with an orange accent with gray and white surfaces. This is a foundation preview, not the complete homepage or a production launch.
 
 ## Run
 
