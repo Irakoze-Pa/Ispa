@@ -11,3 +11,10 @@
 - WhatsApp is intentionally hidden without a configured number.
 
 Later phases must validate functional forms, APIs, MongoDB storage, finalized SEO and production hosting; those features are outside Phase 1.
+
+## Corporate brand refresh
+
+- Supplied logo loads in the navigation, mobile menu and footer.
+- Corporate homepage replaces development-focused messaging with client-facing service, partnership and CTA sections.
+- Hero chart is clearly labeled as an illustration, with no fabricated client metrics.
+- Updated styling reviewed in desktop and mobile browser layouts; no 390px horizontal overflow.

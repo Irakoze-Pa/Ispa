@@ -3,7 +3,11 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ArrowUpRight, ChevronDown, Menu, X } from 'lucide-react';
 import { navigation, services } from '../config/site';
 import { Container } from './ui';
-export function Logo() { return <Link to="/" className="logo" aria-label="ISPA Digital home"><span className="logo-mark">i<span/></span><span>ispa<span className="logo-digital">digital</span></span></Link>; }
+export function Logo() {
+ return <Link to="/" className="logo" aria-label="ISPA Digital home">
+   <span className="logo-image"><img src="/images/ispa-logo.png" alt="ISPA Digital" width="1254" height="1254" /></span>
+ </Link>;
+}
 export function Navbar() {
  const [open, setOpen] = useState(false); const [scrolled, setScrolled] = useState(false); const location = useLocation(); const menuButton = useRef<HTMLButtonElement>(null); const panel = useRef<HTMLDivElement>(null);
  useEffect(() => { setOpen(false); }, [location.pathname]);
