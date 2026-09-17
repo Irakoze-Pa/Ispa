@@ -17,9 +17,9 @@ h1, h2, h3, p { margin: 0; }
 .navbar.scrolled { backdrop-filter: blur(16px); box-shadow: 0 3px 18px #11111108; }
 .nav-inner { height: 104px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
 .logo { display: inline-flex; flex-shrink: 0; }
-/* Display the supplied artwork without modifying its pixels. White margins and the small tagline are clipped in navigation. */
-.logo-image { display: block; width: 154px; height: 69px; position: relative; overflow: hidden; background: white; }
-.logo-image img { position: absolute; width: 118.4%; height: auto; max-width: none; left: -9.35%; top: -74%; }
+/* Frame the supplied symbol without changing its artwork. */
+.logo-image { display: block; width: 51px; height: 65px; position: relative; overflow: hidden; background: white; }
+.logo-image img { position: absolute; width: 184%; height: auto; max-width: none; left: -42.5%; top: -22.3%; }
 .desktop-nav { display: flex; align-items: center; gap: 26px; font-size: 12px; font-weight: 600; }
 .desktop-nav a { padding: 10px 0; }
 .desktop-nav a.active, .desktop-nav a:hover, footer a:hover { color: var(--accent); }
@@ -123,8 +123,8 @@ h1, h2, h3, p { margin: 0; }
 .cta-contact { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 10px; margin-top: 15px; }
 footer { background: #ffffff; padding: 52px 0 0; border-top: 1px solid #e5e5e5; }
 .footer-grid { display: grid; grid-template-columns: 1.4fr 1.25fr .7fr 1fr 1.2fr; gap: 25px; }
-footer .logo-image { width: 165px; height: 85px; }
-footer .logo-image img { top: -55%; }
+footer .logo-image { width: 55px; height: 70px; }
+footer .logo-image img { top: -22.3%; }
 .footer-brand>p { font-size: 12px; line-height: 1.8; color: var(--muted); margin: 18px 0; }
 .location { display: flex; align-items: center; gap: 7px; font-size: 10px; color: var(--muted); }
 footer h2 { font-size: 11px; font-weight: 800; margin-bottom: 20px; }
@@ -159,7 +159,7 @@ footer .footer-grid>div>a:not(.logo) { display: flex; font-size: 10px; color: va
  .desktop-nav { gap: 17px; }
  .nav-inner { gap: 20px; }
  .corporate-hero-grid { gap: 36px; }
- .logo-image { width: 134px; height: 60px; }
+ .logo-image { width: 47px; height: 60px; }
  .footer-grid { grid-template-columns: 1.2fr 1.2fr .8fr 1fr; }
  .footer-grid>div:last-child { grid-column: 1/-1; }
  .workspace-main { padding: 20px; }
@@ -194,7 +194,7 @@ footer .footer-grid>div>a:not(.logo) { display: flex; font-size: 10px; color: va
 @media (max-width: 640px) {
  .container { width: calc(100% - 40px); }
  .nav-inner { height: 86px; gap: 8px; }
- .logo-image { width: 116px; height: 52px; }
+ .logo-image { width: 43px; height: 55px; }
  .nav-cta { font-size: 10px; padding: 12px 13px; gap: 8px; }
  .eyebrow { font-size: 8px; letter-spacing: 1.1px; }
  .corporate-hero-grid { grid-template-columns: 1fr; padding: 40px 0 30px; gap: 35px; }

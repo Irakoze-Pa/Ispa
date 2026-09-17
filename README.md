@@ -38,3 +38,5 @@ The supplied `public/images/ispa-logo.png` is preserved as provided. CSS frames 
 ## Homepage data
 
 Package data lives in `src/data/packages.ts`; sample concepts live in `src/data/projects.ts`. Genuine feedback can be added to `src/data/testimonials.ts`. Package CTAs retain the selection in the quote URL for integration in Phase 6. The full blog and article routes are implemented in Phase 7; homepage insights are currently readable in accessible dialogs. All concept artwork is lightweight HTML/CSS and SVG, without remote image requests.
+
+The shared logo now uses the supplied symbol-only artwork at `public/images/ispa-symbol.png`, framed consistently in the header, mobile menu and footer. The previous full logo is retained as an original brand asset.
