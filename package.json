@@ -9,6 +9,7 @@
     "typecheck": "tsc -b",
     "preview": "vite preview --host 0.0.0.0",
     "dev:server": "tsx watch server/src/index.ts",
+    "admin:create": "tsx server/src/scripts/create-admin.ts",
     "typecheck:server": "tsc -p server/tsconfig.json",
     "check": "npm run typecheck && npm run typecheck:server",
     "generate:seo": "node scripts/generate-seo.mjs"

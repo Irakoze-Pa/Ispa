@@ -1,0 +1,3 @@
+import type { RequestHandler } from 'express';import type { UserRole } from './auth.model.js';import { verifyToken } from './auth.service.js';import { HttpError } from '../../middleware/error.js';
+export const requireAuth:RequestHandler=(req,_res,next)=>{const [scheme,token]=req.headers.authorization?.split(' ')||[];if(scheme!=='Bearer'||!token){next(new HttpError(401,'Authentication required.'));return}try{req.auth=verifyToken(token);next()}catch(error){next(error)}};
+export const requireRole=(...roles:UserRole[]):RequestHandler=>(req,_res,next)=>{if(!req.auth||!roles.includes(req.auth.role)){next(new HttpError(403,'You do not have permission to access this resource.'));return}next()};

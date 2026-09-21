@@ -1,0 +1,3 @@
+import { Router } from 'express';import { z } from 'zod';import { authenticate } from './auth.service.js';import { databaseReady } from '../../config/database.js';import { HttpError } from '../../middleware/error.js';
+export const authRouter=Router();const loginSchema=z.object({email:z.string().email(),password:z.string().min(12).max(128)});
+authRouter.post('/login',async(req,res,next)=>{try{if(!databaseReady())throw new HttpError(503,'Authentication storage is unavailable.');const {email,password}=loginSchema.parse(req.body);res.json(await authenticate(email,password))}catch(error){next(error)}});

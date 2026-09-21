@@ -1,0 +1,4 @@
+import { Schema, model } from 'mongoose';
+export interface ProjectDocument {name:string;slug:string;clientLabel:string;category:string;summary:string;services:string[];status:'draft'|'published';featured:boolean;order:number;image?:{url:string;alt:string;publicId?:string}}
+const schema=new Schema<ProjectDocument>({name:{type:String,required:true,trim:true},slug:{type:String,required:true,unique:true,index:true},clientLabel:{type:String,required:true},category:{type:String,required:true},summary:{type:String,required:true},services:{type:[String],default:[]},status:{type:String,enum:['draft','published'],default:'draft'},featured:{type:Boolean,default:false},order:{type:Number,default:0},image:{url:String,alt:String,publicId:String}},{timestamps:true});
+export const ProjectModel=model<ProjectDocument>('Project',schema);

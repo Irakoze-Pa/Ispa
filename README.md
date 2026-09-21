@@ -1,4 +1,4 @@
-# ISPA Digital — Phases 1–7
+# ISPA Digital — Phases 1–8
 
 React, Vite, TypeScript, Tailwind CSS, React Router and Lucide foundation. Manrope typography with orange accents, gray structure and white surfaces. The responsive corporate site includes the supplied ISPA Digital logo, complete service pages, sample project concepts, packages, contact and quote flows, an About page, and original insight articles. This is not a production launch; admin features, final legal copy and deployment remain staged.
 
@@ -27,7 +27,7 @@ All requested public routes resolve; only legal pages remain placeholders until 
 5. Packages (complete): standalone marketing and web plans plus the full add-on catalogue.
 6. Contact and quote (complete): validated forms, modular Express endpoints and MongoDB persistence architecture. Configure `MONGODB_URI` to enable storage.
 7. Blog and About (complete): original articles, per-page metadata, canonical URLs, structured data and production sitemap generation.
-8. Backend modules and protected admin authentication architecture.
+8. Backend and admin preparation (complete): secure password hashing, signed expiring bearer sessions, admin/editor role guards, protected content listings and models for future managed content.
 9. Accessibility, performance and responsive verification.
 10. Production deployment configuration.
 
@@ -47,4 +47,6 @@ The current shared lockup uses the original two-dot ISPA symbol with a typeset I
 
 ## Forms and API
 
-Run `npm run dev:server` for the Express API on port 5050. Contact submits to `POST /api/contact`; quote requests submit to `POST /api/quotes`. In development Vite proxies `/api` to the backend. Both endpoints strictly validate input and store through Mongoose only when MongoDB is connected. Run `npm run check` for frontend and server TypeScript checks.
+Run `npm run dev:server` for the Express API on port 5050. Contact submits to `POST /api/contact`; quote requests submit to `POST /api/quotes`. In development Vite proxies `/api` to the backend. Both endpoints strictly validate input and store through Mongoose only when MongoDB is connected.
+
+Admin APIs are server-only under `/api/admin` and require a signed bearer token with an `admin` or `editor` role. Configure a 32+ character `AUTH_SECRET`, MongoDB, `ADMIN_EMAIL` and a 12+ character `ADMIN_PASSWORD`, then run `npm run admin:create` to provision the first administrator. The script never ships default credentials. Run `npm run check` for frontend and server TypeScript checks.
