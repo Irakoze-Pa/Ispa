@@ -6,7 +6,7 @@ The project ships as one Node service: Vite builds the public site into `dist`, 
 
 Set `NODE_ENV=production`, `PORT`, `MONGODB_URI`, `CLIENT_ORIGIN`, a random `AUTH_SECRET` of at least 32 characters, `VITE_SITE_URL`, `SITE_URL`, and `VITE_API_URL=/api`. Configure SMTP, Cloudinary and tracking variables from `.env.example` only when those integrations are enabled. Never place server secrets in a `VITE_` variable.
 
-Before the final build, run `SITE_URL=https://your-confirmed-domain.example npm run generate:seo` so the sitemap and robots file use the real origin. Replace the legal-page preview copy with approved policies and provide verified phone, email, business hours, social profiles and WhatsApp number before launch.
+Before the final build, run `SITE_URL=https://your-confirmed-domain.example npm run generate:seo` so the sitemap and robots file use the real origin. Complete the legal review note on the Privacy Policy and Terms pages, then provide verified phone, email, business hours, social profiles and WhatsApp number before launch.
 
 ## Build and run
 

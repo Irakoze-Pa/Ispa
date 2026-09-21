@@ -1,6 +1,6 @@
 # ISPA Digital — Phases 1–10
 
-React, Vite, TypeScript, Tailwind CSS, React Router and Lucide foundation. Manrope typography with orange accents, gray structure and white surfaces. The responsive corporate site includes the supplied ISPA Digital logo, complete service pages, sample project concepts, packages, contact and quote flows, an About page, and original insight articles. This is not a production launch; admin features, final legal copy and deployment remain staged.
+React, Vite, TypeScript, Tailwind CSS, React Router and Lucide foundation. Manrope typography with orange accents, gray structure and white surfaces. The responsive corporate site includes the supplied ISPA Digital logo, complete service pages, sample project concepts, packages, contact and quote flows, an About page, and original insight articles. Production deployment is prepared; the private admin UI, verified business contact details and final legal approval remain outstanding.
 
 ## Run
 
@@ -16,7 +16,7 @@ Use Node.js 20.19+ or 22.12+. Run `npm install`, copy `.env.example` to `.env` i
 - `server/src`: modular Express API and Mongoose models
 - `public`: supplied brand assets and crawler rules
 
-All requested public routes resolve; only legal pages remain placeholders until approved copy is supplied. Unknown routes show 404. Admin functionality is not exposed. Mobile navigation supports Escape, a focus trap and scroll locking. WhatsApp appears only when a valid configured number is supplied; no contact details, client results or testimonials are invented.
+All requested public routes resolve, including full Privacy Policy and Terms pages tailored to the site’s current functionality. Unknown routes show 404. Admin functionality is not exposed. Mobile navigation supports Escape, a focus trap and scroll locking. WhatsApp appears only when a valid configured number is supplied; no contact details, client results or testimonials are invented.
 
 ## Phase boundaries
 
@@ -31,7 +31,7 @@ All requested public routes resolve; only legal pages remain placeholders until 
 9. Optimization (complete): mobile and desktop route smoke tests, horizontal-overflow checks, alt-text audit, duplicate logo announcement cleanup, reduced-motion support and render-safe dialog behavior.
 10. Deployment preparation (complete): emitted API build, single-service SPA hosting, security and cache headers, graceful shutdown, health-aware multi-stage container and production runbook.
 
-Production hosting must rewrite non-asset frontend routes to `index.html`. Set `VITE_API_URL` for the API and set both `VITE_SITE_URL` and server-side `SITE_URL` to the confirmed production origin. Run `npm run generate:seo` before deployment. Never expose MongoDB, SMTP or Cloudinary secrets through `VITE_` variables. Tracking variables are reserved and inactive. External Google Fonts currently supplies Manrope; self-hosting can be considered during performance optimization. Legal routes intentionally contain preview notices until approved policy content is supplied.
+Production hosting must rewrite non-asset frontend routes to `index.html`. Set `VITE_API_URL` for the API and set both `VITE_SITE_URL` and server-side `SITE_URL` to the confirmed production origin. Run `npm run generate:seo` before deployment. Never expose MongoDB, SMTP or Cloudinary secrets through `VITE_` variables. Tracking variables are reserved and inactive. External Google Fonts currently supplies Manrope; self-hosting can be considered during performance optimization. Legal routes contain publication-ready working drafts and a visible final-review note until ISPA Digital approves the business-specific legal details.
 
 ## Brand refresh
 
