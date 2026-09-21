@@ -1,4 +1,4 @@
-# ISPA Digital — Phases 1–8
+# ISPA Digital — Phases 1–9
 
 React, Vite, TypeScript, Tailwind CSS, React Router and Lucide foundation. Manrope typography with orange accents, gray structure and white surfaces. The responsive corporate site includes the supplied ISPA Digital logo, complete service pages, sample project concepts, packages, contact and quote flows, an About page, and original insight articles. This is not a production launch; admin features, final legal copy and deployment remain staged.
 
@@ -28,7 +28,7 @@ All requested public routes resolve; only legal pages remain placeholders until 
 6. Contact and quote (complete): validated forms, modular Express endpoints and MongoDB persistence architecture. Configure `MONGODB_URI` to enable storage.
 7. Blog and About (complete): original articles, per-page metadata, canonical URLs, structured data and production sitemap generation.
 8. Backend and admin preparation (complete): secure password hashing, signed expiring bearer sessions, admin/editor role guards, protected content listings and models for future managed content.
-9. Accessibility, performance and responsive verification.
+9. Optimization (complete): mobile and desktop route smoke tests, horizontal-overflow checks, alt-text audit, duplicate logo announcement cleanup, reduced-motion support and render-safe dialog behavior.
 10. Production deployment configuration.
 
 Production hosting must rewrite non-asset frontend routes to `index.html`. Set `VITE_API_URL` for the API and set both `VITE_SITE_URL` and server-side `SITE_URL` to the confirmed production origin. Run `npm run generate:seo` before deployment. Never expose MongoDB, SMTP or Cloudinary secrets through `VITE_` variables. Tracking variables are reserved and inactive. External Google Fonts currently supplies Manrope; self-hosting can be considered during performance optimization. Legal routes intentionally contain preview notices until approved policy content is supplied.
