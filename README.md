@@ -1,4 +1,4 @@
-# ISPA Digital — Phases 1–3
+# ISPA Digital — Phases 1–4
 
 React, Vite, TypeScript, Tailwind CSS, React Router and Lucide foundation. Manrope typography with an orange accent with gray and white surfaces. The responsive homepage includes the supplied ISPA Digital logo, services, value proposition, web showcase, sample project dialogs, all marketing and web packages, an interactive five-step process and readable insights. This is not a production launch; secondary pages and backend features remain staged.
 
@@ -23,7 +23,8 @@ All requested public routes resolve. Secondary pages are still placeholders pend
 1. Foundation (current): design system, shared shell, routing, UI primitives.
 2. Homepage (complete): full homepage flow with interactive sample projects, process and insights. Testimonials stay hidden until real approved feedback is added.
 3. Services (complete): overview and seven full service pages with inclusions, benefits, process, FAQs and CTAs.
-4–5. Portfolio and standalone packages pages.
+4. Portfolio (complete): filterable, typed sample concepts with reusable cards and accessible detail dialogs.
+5. Standalone packages page.
 6. Validated contact/quote forms, Express API and MongoDB persistence.
 7. Blog, per-page metadata, canonical URLs, structured data and sitemap.
 8. Backend modules and protected admin authentication architecture.

@@ -40,3 +40,12 @@ Later phases must validate functional forms, APIs, MongoDB storage, finalized SE
 - Website Development FAQ disclosure tested in the browser; answer expands correctly.
 - Desktop browser review confirms 1280px document width matches the viewport without horizontal overflow.
 - Shared header and footer reviewed with the two-dot ISPA symbol plus the ISPA / DIGITAL wordmark.
+
+## Phase 4 — Portfolio
+
+- Filterable portfolio implements all requested categories.
+- Five sample concepts are explicitly identified as fictional demonstrations with no client results.
+- Category filter tested: Content Creation narrows five concepts to one.
+- Accessible native project dialog tested with concept description, fictional client label, services and quote CTA.
+- Homepage featured projects now reuse the same typed project cards and dialog.
+- TypeScript and production build pass.
