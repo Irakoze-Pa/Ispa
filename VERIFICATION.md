@@ -30,3 +30,13 @@ Later phases must validate functional forms, APIs, MongoDB storage, finalized SE
 - Business Growth CTA navigates to `/request-quote?package=Business%20Growth`.
 - Browser review at 390px mobile, 768px tablet and 1280px desktop; document width matches each viewport. Mobile package cards and device showcase reviewed visually.
 - Secondary routes remain scheduled placeholders. No enquiry or quote submission is simulated.
+
+## Phase 3 — Services
+
+- TypeScript and production build pass.
+- Services overview renders all seven primary service routes.
+- Digital Marketing, Social Media Management, Content Creation, Website Development, E-commerce, SEO and Branding routes each render the expected unique H1 and three service-specific FAQs.
+- Every detail page includes challenge, approach, inclusions, benefits, five-step process, related services, FAQ and quote CTA.
+- Website Development FAQ disclosure tested in the browser; answer expands correctly.
+- Desktop browser review confirms 1280px document width matches the viewport without horizontal overflow.
+- Shared header and footer reviewed with the two-dot ISPA symbol plus the ISPA / DIGITAL wordmark.

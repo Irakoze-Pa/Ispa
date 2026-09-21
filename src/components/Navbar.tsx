@@ -5,7 +5,8 @@ import { navigation, services } from '../config/site';
 import { Container } from './ui';
 export function Logo() {
  return <Link to="/" className="logo" aria-label="ISPA Digital home">
-   <span className="logo-image"><img src="/images/ispa-symbol.png" alt="ISPA Digital" width="1254" height="1254" /></span>
+   <span className="logo-image"><img src="/images/ispa-logo.png" alt="ISPA Digital" width="1254" height="1254" /></span>
+   <span className="logo-wordmark"><strong>ISPA</strong><span>DIGITAL</span></span>
  </Link>;
 }
 export function Navbar() {

@@ -1,4 +1,4 @@
-# ISPA Digital — Phases 1–2
+# ISPA Digital — Phases 1–3
 
 React, Vite, TypeScript, Tailwind CSS, React Router and Lucide foundation. Manrope typography with an orange accent with gray and white surfaces. The responsive homepage includes the supplied ISPA Digital logo, services, value proposition, web showcase, sample project dialogs, all marketing and web packages, an interactive five-step process and readable insights. This is not a production launch; secondary pages and backend features remain staged.
 
@@ -22,7 +22,8 @@ All requested public routes resolve. Secondary pages are still placeholders pend
 
 1. Foundation (current): design system, shared shell, routing, UI primitives.
 2. Homepage (complete): full homepage flow with interactive sample projects, process and insights. Testimonials stay hidden until real approved feedback is added.
-3–5. Services, sample portfolio and packages.
+3. Services (complete): overview and seven full service pages with inclusions, benefits, process, FAQs and CTAs.
+4–5. Portfolio and standalone packages pages.
 6. Validated contact/quote forms, Express API and MongoDB persistence.
 7. Blog, per-page metadata, canonical URLs, structured data and sitemap.
 8. Backend modules and protected admin authentication architecture.
@@ -40,3 +41,5 @@ The supplied `public/images/ispa-logo.png` is preserved as provided. CSS frames 
 Package data lives in `src/data/packages.ts`; sample concepts live in `src/data/projects.ts`. Genuine feedback can be added to `src/data/testimonials.ts`. Package CTAs retain the selection in the quote URL for integration in Phase 6. The full blog and article routes are implemented in Phase 7; homepage insights are currently readable in accessible dialogs. All concept artwork is lightweight HTML/CSS and SVG, without remote image requests.
 
 The shared logo now uses the supplied symbol-only artwork at `public/images/ispa-symbol.png`, framed consistently in the header, mobile menu and footer. The previous full logo is retained as an original brand asset.
+
+The current shared lockup uses the original two-dot ISPA symbol with a typeset ISPA / DIGITAL wordmark. The supplied artwork is preserved, with CSS framing only.
