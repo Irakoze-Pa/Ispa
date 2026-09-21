@@ -1,0 +1,2 @@
+import { z } from 'zod';
+export const contactSchema=z.object({fullName:z.string().trim().min(2).max(100),companyName:z.string().trim().max(120).optional().default(''),email:z.string().trim().email().max(160),phone:z.string().trim().max(40).optional().default(''),service:z.string().trim().min(2).max(100),budget:z.string().trim().max(100).optional().default(''),message:z.string().trim().min(20).max(3000)}).strict();

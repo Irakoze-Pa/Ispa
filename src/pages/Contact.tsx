@@ -1,0 +1,6 @@
+import { Clock3, Mail, MapPin, Phone } from 'lucide-react';
+import { ContactForm } from '../components/Forms';
+import { Container } from '../components/ui';
+import { site } from '../config/site';
+const publicOrPlaceholder=(value:string,placeholder:string)=>value||placeholder;
+export default function Contact(){return <><section className="page-hero"><Container><p className="eyebrow">CONTACT ISPA DIGITAL</p><h1>Let’s start a <span>meaningful conversation.</span></h1><p>Tell us about your business, your goals and the digital challenge you want to solve.</p></Container></section><section className="form-page"><Container><aside><p className="eyebrow">LET’S TALK</p><h2>We’re ready to listen.</h2><p>Share what you know today. We can help clarify the next step together.</p><div className="contact-details"><div><MapPin/><span>Location<strong>{site.location}</strong></span></div><div><Phone/><span>Phone<strong>{publicOrPlaceholder(site.phone,'Phone number coming soon')}</strong></span></div><div><Mail/><span>Email<strong>{publicOrPlaceholder(site.email,'Email address coming soon')}</strong></span></div><div><Clock3/><span>Business hours<strong>{publicOrPlaceholder(site.businessHours,'Business hours coming soon')}</strong></span></div></div></aside><ContactForm/></Container></section></>}

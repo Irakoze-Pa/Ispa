@@ -1,0 +1,2 @@
+import { databaseReady } from '../../config/database.js';import { HttpError } from '../../middleware/error.js';import { QuoteModel } from './quote.model.js';import type { z } from 'zod';import type { quoteSchema } from './quote.validation.js';
+export async function createQuote(data:z.infer<typeof quoteSchema>){if(!databaseReady())throw new HttpError(503,'Quote requests are temporarily unavailable while the database is being configured.');return QuoteModel.create(data);}

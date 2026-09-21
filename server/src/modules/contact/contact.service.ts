@@ -1,0 +1,2 @@
+import { databaseReady } from '../../config/database.js';import { HttpError } from '../../middleware/error.js';import { ContactModel } from './contact.model.js';import type { z } from 'zod';import type { contactSchema } from './contact.validation.js';
+export async function createContact(data:z.infer<typeof contactSchema>){if(!databaseReady())throw new HttpError(503,'Enquiries are temporarily unavailable while the database is being configured.');return ContactModel.create(data);}

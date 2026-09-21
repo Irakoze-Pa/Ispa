@@ -1,1 +1,38 @@
-{"name":"ispa-digital","private":true,"version":"0.1.0","type":"module","scripts":{"dev":"vite --host 0.0.0.0","build":"tsc -b && vite build","typecheck":"tsc -b","preview":"vite preview --host 0.0.0.0"},"dependencies":{"react":"^19.1.0","react-dom":"^19.1.0","react-router-dom":"^7.6.0","lucide-react":"^0.511.0"},"devDependencies":{"@types/react":"^19.1.0","@types/react-dom":"^19.1.0","@vitejs/plugin-react":"^4.5.0","typescript":"~5.8.3","vite":"^6.3.5","tailwindcss":"^4.1.0","@tailwindcss/vite":"^4.1.0"}}
+{
+  "name": "ispa-digital",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
+    "preview": "vite preview --host 0.0.0.0",
+    "dev:server": "tsx watch server/src/index.ts",
+    "typecheck:server": "tsc -p server/tsconfig.json",
+    "check": "npm run typecheck && npm run typecheck:server"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.1",
+    "express": "^5.2.1",
+    "lucide-react": "^0.511.0",
+    "mongoose": "^9.10.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.5.0",
+    "tailwindcss": "^4.1.0",
+    "tsx": "^4.23.15",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}

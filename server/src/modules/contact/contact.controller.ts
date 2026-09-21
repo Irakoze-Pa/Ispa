@@ -1,0 +1,2 @@
+import type { RequestHandler } from 'express';import { contactSchema } from './contact.validation.js';import { createContact } from './contact.service.js';
+export const submitContact:RequestHandler=async(req,res,next)=>{try{const data=contactSchema.parse(req.body);const saved=await createContact(data);res.status(201).json({message:'Your message has been received.',id:saved.id});}catch(error){next(error)}};

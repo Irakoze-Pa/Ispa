@@ -3,6 +3,8 @@ export const site = {
   apiUrl: import.meta.env.VITE_API_URL || '/api',
   whatsapp: import.meta.env.VITE_WHATSAPP_NUMBER || '',
   email: import.meta.env.VITE_CONTACT_EMAIL || '',
+  phone: import.meta.env.VITE_CONTACT_PHONE || '',
+  businessHours: import.meta.env.VITE_BUSINESS_HOURS || '',
 };
 export const services = [
   ['Digital Marketing', 'digital-marketing'], ['Social Media Management', 'social-media'],

@@ -1,4 +1,4 @@
-# ISPA Digital — Phases 1–5
+# ISPA Digital — Phases 1–6
 
 React, Vite, TypeScript, Tailwind CSS, React Router and Lucide foundation. Manrope typography with an orange accent with gray and white surfaces. The responsive homepage includes the supplied ISPA Digital logo, services, value proposition, web showcase, sample project dialogs, all marketing and web packages, an interactive five-step process and readable insights. This is not a production launch; secondary pages and backend features remain staged.
 
@@ -25,7 +25,7 @@ All requested public routes resolve. Secondary pages are still placeholders pend
 3. Services (complete): overview and seven full service pages with inclusions, benefits, process, FAQs and CTAs.
 4. Portfolio (complete): filterable, typed sample concepts with reusable cards and accessible detail dialogs.
 5. Packages (complete): standalone marketing and web plans plus the full add-on catalogue.
-6. Validated contact/quote forms, Express API and MongoDB persistence.
+6. Contact and quote (complete): validated forms, modular Express endpoints and MongoDB persistence architecture. Configure `MONGODB_URI` to enable storage.
 7. Blog, per-page metadata, canonical URLs, structured data and sitemap.
 8. Backend modules and protected admin authentication architecture.
 9. Accessibility, performance and responsive verification.
@@ -44,3 +44,7 @@ Package data lives in `src/data/packages.ts`; sample concepts live in `src/data/
 The shared logo now uses the supplied symbol-only artwork at `public/images/ispa-symbol.png`, framed consistently in the header, mobile menu and footer. The previous full logo is retained as an original brand asset.
 
 The current shared lockup uses the original two-dot ISPA symbol with a typeset ISPA / DIGITAL wordmark. The supplied artwork is preserved, with CSS framing only.
+
+## Forms and API
+
+Run `npm run dev:server` for the Express API on port 5050. Contact submits to `POST /api/contact`; quote requests submit to `POST /api/quotes`. In development Vite proxies `/api` to the backend. Both endpoints strictly validate input and store through Mongoose only when MongoDB is connected. Run `npm run check` for frontend and server TypeScript checks.
