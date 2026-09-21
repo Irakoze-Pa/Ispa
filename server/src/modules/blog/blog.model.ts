@@ -1,0 +1,4 @@
+import { Schema, model } from 'mongoose';
+export interface BlogPostDocument {title:string;slug:string;category:string;excerpt:string;content:{heading:string;paragraphs:string[];points?:string[]}[];status:'draft'|'published';publishedAt?:Date;author?:string;featuredImage?:{url:string;alt:string;publicId?:string}}
+const schema=new Schema<BlogPostDocument>({title:{type:String,required:true,trim:true},slug:{type:String,required:true,unique:true,index:true},category:{type:String,required:true},excerpt:{type:String,required:true},content:[{heading:{type:String,required:true},paragraphs:{type:[String],required:true},points:[String]}],status:{type:String,enum:['draft','published'],default:'draft'},publishedAt:Date,author:String,featuredImage:{url:String,alt:String,publicId:String}},{timestamps:true});
+export const BlogPostModel=model<BlogPostDocument>('BlogPost',schema);
