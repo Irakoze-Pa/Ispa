@@ -4,8 +4,6 @@ import { DigitalPreview, FinalCTA, ServicesSection } from '../components/HomeSec
 
 import { FeaturedProjects, InsightsSection, PricingSection, ProcessSection, ValueSection, WebsiteShowcase, WhySection } from '../components/GrowthSections';
 
-import { Testimonials } from '../components/Testimonials';
-
 export default function Home() {
   return <>
     <section className="corporate-hero"><Container>
@@ -26,7 +24,6 @@ export default function Home() {
     <FeaturedProjects/>
     <PricingSection/>
     <ProcessSection/>
-    <Testimonials/>
     <InsightsSection/>
     <FinalCTA/>
   </>;

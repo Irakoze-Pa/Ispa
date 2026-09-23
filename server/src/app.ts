@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { env } from './config/env.js';
 import { contactRouter } from './modules/contact/contact.routes.js';
 import { quoteRouter } from './modules/quote/quote.routes.js';
@@ -21,7 +22,7 @@ app.use('/api/admin',adminRouter);
 app.use('/api',notFound);
 
 if(env.NODE_ENV==='production'){
- const webRoot=resolve(process.cwd(),'dist');
+ const webRoot=resolve(fileURLToPath(new URL('.',import.meta.url)),'../../client/dist');
  app.use(express.static(webRoot,{maxAge:'1d',setHeaders:(res,file)=>{if(file.includes('/assets/'))res.setHeader('Cache-Control','public, max-age=31536000, immutable')}}));
  app.use((req,res,next)=>{if(req.method==='GET'&&req.accepts('html')){res.setHeader('Cache-Control','no-cache');res.sendFile(resolve(webRoot,'index.html'));return}next()});
 }
