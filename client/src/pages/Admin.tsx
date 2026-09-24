@@ -1,108 +1,90 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
-import { FileText, FolderKanban, Inbox, LogOut, RefreshCw, Settings, ShieldCheck } from 'lucide-react';
+import { BarChart3, BriefcaseBusiness, CheckCircle2, Eye, EyeOff, FileText, FolderKanban, Inbox, LogOut, Menu, Pencil, Plus, RefreshCw, Search, Settings, ShieldCheck, Trash2, X } from 'lucide-react';
 import { site } from '../config/site';
 
 type AdminUser = { email: string; role: 'admin' | 'editor' };
 type Section = 'messages' | 'quotes' | 'blog' | 'projects' | 'services';
-type RecordValue = string | number | boolean | null | undefined | string[];
-type AdminRecord = Record<string, RecordValue> & { _id?: string; createdAt?: string; updatedAt?: string };
-
-const sections: Array<{ id: Section; label: string; icon: typeof Inbox }> = [
-  { id: 'messages', label: 'Messages', icon: Inbox },
-  { id: 'quotes', label: 'Quotes', icon: FileText },
-  { id: 'blog', label: 'Blog', icon: FileText },
-  { id: 'projects', label: 'Projects', icon: FolderKanban },
-  { id: 'services', label: 'Services', icon: Settings },
+type RecordValue = unknown;
+type AdminRecord = Record<string, RecordValue> & { _id?: string; createdAt?: string; updatedAt?: string; status?: string };
+const sections: Array<{ id: Section; label: string; singular: string; icon: typeof Inbox }> = [
+  { id: 'messages', label: 'Messages', singular: 'message', icon: Inbox }, { id: 'quotes', label: 'Quote requests', singular: 'quote', icon: BriefcaseBusiness },
+  { id: 'blog', label: 'Blog', singular: 'post', icon: FileText }, { id: 'projects', label: 'Projects', singular: 'project', icon: FolderKanban }, { id: 'services', label: 'Services', singular: 'service', icon: Settings },
 ];
-
 const tokenKey = 'ispa_admin_token';
+const workflowSections: Section[] = ['messages', 'quotes'];
+const statuses: Partial<Record<Section, string[]>> = { messages: ['new', 'reviewed', 'closed'], quotes: ['new', 'reviewed', 'quoted', 'closed'] };
+const manageableSections: Section[] = ['blog', 'projects', 'services'];
+
+function AdminBrand() { return <a className="admin-brand" href="/" aria-label="ISPA Digital website"><span className="admin-brand-symbol"><img src="/images/ispa-symbol.png" alt=""/></span><span className="admin-brand-name"><strong>ISPA</strong><small>DIGITAL</small></span></a>; }
 
 async function request<T>(path: string, token?: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${site.apiUrl}${path}`, {
-    ...init,
-    headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...init?.headers },
-  });
-  const payload = await response.json().catch(() => ({ message: 'The server returned an unreadable response.' })) as T & { message?: string };
-  if (!response.ok) throw new Error(payload.message || 'The request failed.');
+  let response: Response;
+  try { response = await fetch(`${site.apiUrl}${path}`, { ...init, headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...init?.headers } }); }
+  catch { throw new Error('The API is offline. Start the server and confirm the database connection.'); }
+  const type = response.headers.get('content-type') || '';
+  const payload = type.includes('application/json') ? await response.json() as T & { message?: string } : null;
+  if (!response.ok) throw new Error(payload?.message || (response.status === 502 ? 'The API server is unavailable.' : `Request failed (${response.status}).`));
+  if (!payload) throw new Error('The API returned an unexpected response.');
   return payload;
 }
-
-function displayValue(value: RecordValue) {
-  if (Array.isArray(value)) return value.join(', ');
-  if (value === null || value === undefined || value === '') return '—';
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-  return String(value);
+function displayValue(value: RecordValue, key = '') {
+  if (Array.isArray(value)) return value.join(', '); if (value === null || value === undefined || value === '') return '—'; if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+  if ((key === 'createdAt' || key === 'updatedAt') && typeof value === 'string') return new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value)); return String(value);
 }
 
-function RecordCard({ record }: { record: AdminRecord }) {
-  const preferred = ['name', 'title', 'email', 'company', 'service', 'status', 'message', 'budget', 'createdAt'];
-  const keys = [...preferred.filter(key => key in record), ...Object.keys(record).filter(key => !preferred.includes(key) && !['_id', '__v', 'updatedAt'].includes(key))].slice(0, 8);
-  const heading = displayValue(record.name || record.title || record.email || 'Record');
-  return <article className="admin-record">
-    <div className="admin-record-head"><h3>{heading}</h3>{record.status && <span>{displayValue(record.status)}</span>}</div>
-    <dl>{keys.filter(key => key !== 'name' && key !== 'title' && key !== 'status').map(key => <div key={key}><dt>{key.replace(/([A-Z])/g, ' $1')}</dt><dd>{displayValue(record[key])}</dd></div>)}</dl>
-  </article>;
+function RecordCard({ record, section, token, canDelete, onUpdated, onEdit, onDelete }: { record: AdminRecord; section: Section; token: string; canDelete: boolean; onUpdated: (record: AdminRecord) => void; onEdit: () => void; onDelete: () => void }) {
+  const [saving, setSaving] = useState(false);
+  const preferred = ['name', 'fullName', 'title', 'email', 'company', 'companyName', 'phone', 'service', 'services', 'message', 'projectDescription', 'budget', 'budgetRange', 'createdAt'];
+  const keys = [...preferred.filter(key => key in record), ...Object.keys(record).filter(key => !preferred.includes(key) && !['_id', '__v', 'updatedAt', 'status', 'content', 'image', 'featuredImage'].includes(key))].slice(0, 9);
+  const heading = displayValue(record.name || record.fullName || record.title || record.email || 'Record');
+  async function updateStatus(status: string) { if (!record._id || status === record.status) return; setSaving(true); try { onUpdated(await request<AdminRecord>(`/admin/${section}/${record._id}/status`, token, { method: 'PATCH', body: JSON.stringify({ status }) })); } finally { setSaving(false); } }
+  return <article className="admin-record"><div className="admin-record-head"><div><span className="admin-record-type">{sections.find(item => item.id === section)?.singular}</span><h3>{heading}</h3></div>{record.status && <span className={`status-badge status-${record.status}`}>{record.status}</span>}</div>
+    <dl>{keys.filter(key => !['name', 'fullName', 'title'].includes(key)).map(key => <div className={['message', 'projectDescription'].includes(key) ? 'wide' : ''} key={key}><dt>{key.replace(/([A-Z])/g, ' $1')}</dt><dd>{key === 'email' && record[key] ? <a href={`mailto:${record[key]}`}>{displayValue(record[key], key)}</a> : displayValue(record[key], key)}</dd></div>)}</dl>
+    {workflowSections.includes(section) && record.status && <div className="admin-record-actions"><label><span>Workflow status</span><select value={record.status} disabled={saving} onChange={event => updateStatus(event.target.value)}>{statuses[section]?.map(status => <option key={status}>{status}</option>)}</select></label>{saving && <RefreshCw className="spin" size={15}/>}</div>}
+    {manageableSections.includes(section) && <div className="admin-record-actions admin-content-actions"><button onClick={onEdit}><Pencil size={14}/> Edit</button>{canDelete && <button className="danger" onClick={onDelete}><Trash2 size={14}/> Delete</button>}</div>}</article>;
+}
+
+function ContentEditor({ section, record, token, onClose, onSaved }: { section: Section; record: AdminRecord | null; token: string; onClose: () => void; onSaved: (record: AdminRecord) => void }) {
+  const [saving, setSaving] = useState(false); const [error, setError] = useState('');
+  const value = (key: string) => displayValue(record?.[key] === undefined ? '' : record[key]);
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); setSaving(true); setError(''); const data = new FormData(event.currentTarget); const get = (key: string) => String(data.get(key) || '').trim();
+    const common = { slug: get('slug'), status: get('status') };
+    const payload = section === 'blog' ? { ...common, title: get('title'), category: get('category'), excerpt: get('summary'), author: get('author'), content: [{ heading: 'Overview', paragraphs: [get('content')] }] }
+      : section === 'projects' ? { ...common, name: get('name'), clientLabel: get('clientLabel'), category: get('category'), summary: get('summary'), services: get('services').split(',').map(item => item.trim()).filter(Boolean), featured: data.get('featured') === 'on', order: Number(get('order') || 0) }
+      : { ...common, name: get('name'), summary: get('summary'), order: Number(get('order') || 0), content: [{ heading: 'Overview', body: get('content') }] };
+    try { onSaved(await request<AdminRecord>(`/admin/${section}${record?._id ? `/${record._id}` : ''}`, token, { method: record?._id ? 'PUT' : 'POST', body: JSON.stringify(payload) })); onClose(); }
+    catch (cause) { setError(cause instanceof Error ? cause.message : 'Unable to save this item.'); } finally { setSaving(false); }
+  }
+  const contentValue = section === 'blog' ? ((record?.content as unknown as Array<{paragraphs?:string[]}>)?.[0]?.paragraphs?.join('\n\n') || '') : ((record?.content as unknown as Array<{body?:string}>)?.[0]?.body || '');
+  return <div className="admin-modal-backdrop" onMouseDown={event => event.target === event.currentTarget && onClose()}><section className="admin-editor" role="dialog" aria-modal="true" aria-labelledby="editor-title"><header><div><p className="eyebrow">CONTENT MANAGEMENT</p><h2 id="editor-title">{record ? 'Edit' : 'Create'} {sections.find(item => item.id === section)?.singular}</h2></div><button aria-label="Close editor" onClick={onClose}><X/></button></header><form onSubmit={submit}>
+    <div className="admin-editor-grid">{section === 'blog' ? <><label>Title<input name="title" defaultValue={value('title')} required/></label><label>Category<input name="category" defaultValue={value('category')} required/></label><label>Author<input name="author" defaultValue={value('author')}/></label></> : <><label>Name<input name="name" defaultValue={value('name')} required/></label>{section === 'projects' && <><label>Client label<input name="clientLabel" defaultValue={value('clientLabel')} required/></label><label>Category<input name="category" defaultValue={value('category')} required/></label></>}</>}
+      <label>URL slug<input name="slug" defaultValue={value('slug')} pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="example-page" required/></label><label>Status<select name="status" defaultValue={value('status') === '—' ? 'draft' : value('status')}><option value="draft">Draft</option><option value="published">Published</option></select></label>{section !== 'blog' && <label>Display order<input name="order" type="number" min="0" defaultValue={value('order') === '—' ? '0' : value('order')}/></label>}</div>
+    <label>Summary<textarea name="summary" rows={3} defaultValue={section === 'blog' ? value('excerpt') : value('summary')} required/></label>{section === 'projects' ? <><label>Services <small>Separate services with commas</small><input name="services" defaultValue={Array.isArray(record?.services) ? record.services.join(', ') : ''}/></label><label className="admin-check"><input name="featured" type="checkbox" defaultChecked={record?.featured === true}/> Feature this project</label></> : <label>Content<textarea name="content" rows={8} defaultValue={contentValue} required/></label>}
+    {error && <p className="admin-error" role="alert">{error}</p>}<footer><button type="button" className="button button-secondary" onClick={onClose}>Cancel</button><button className="button button-primary" disabled={saving}>{saving ? 'Saving…' : record ? 'Save changes' : 'Create item'}</button></footer>
+  </form></section></div>;
 }
 
 export default function Admin() {
-  const [token, setToken] = useState(() => localStorage.getItem(tokenKey) || '');
-  const [user, setUser] = useState<AdminUser | null>(null);
-  const [section, setSection] = useState<Section>('messages');
-  const [records, setRecords] = useState<AdminRecord[]>([]);
-  const [loading, setLoading] = useState(Boolean(token));
-  const [error, setError] = useState('');
-
+  const [token, setToken] = useState(() => localStorage.getItem(tokenKey) || ''); const [user, setUser] = useState<AdminUser | null>(null); const [section, setSection] = useState<Section>('messages');
+  const [records, setRecords] = useState<AdminRecord[]>([]); const [loading, setLoading] = useState(Boolean(token)); const [error, setError] = useState(''); const [query, setQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all'); const [showPassword, setShowPassword] = useState(false); const [menuOpen, setMenuOpen] = useState(false); const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [editing, setEditing] = useState<AdminRecord | null | 'new'>(null);
   const logout = useCallback(() => { localStorage.removeItem(tokenKey); setToken(''); setUser(null); setRecords([]); }, []);
-  const loadSection = useCallback(async (nextSection: Section, authToken = token) => {
-    setLoading(true); setError('');
-    try { setRecords(await request<AdminRecord[]>(`/admin/${nextSection}`, authToken)); }
-    catch (cause) { setError(cause instanceof Error ? cause.message : 'Unable to load dashboard data.'); }
-    finally { setLoading(false); }
-  }, [token]);
+  const loadSection = useCallback(async (nextSection: Section, authToken = token) => { setLoading(true); setError(''); try { setRecords(await request<AdminRecord[]>(`/admin/${nextSection}`, authToken)); setLastUpdated(new Date()); } catch (cause) { setError(cause instanceof Error ? cause.message : 'Unable to load dashboard data.'); } finally { setLoading(false); } }, [token]);
+  useEffect(() => { if (!token) return; request<{ user: AdminUser }>('/admin/session', token).then(({ user }) => setUser(user)).catch(logout); }, [token, logout]);
+  useEffect(() => { if (token && user) loadSection(section); }, [section, token, user, loadSection]);
+  useEffect(() => { setQuery(''); setStatusFilter('all'); setMenuOpen(false); }, [section]);
+  const filtered = useMemo(() => records.filter(record => (statusFilter === 'all' || record.status === statusFilter) && Object.values(record).flat().join(' ').toLowerCase().includes(query.trim().toLowerCase())), [records, query, statusFilter]);
+  const newCount = records.filter(record => record.status === 'new').length;
+  async function deleteRecord(record: AdminRecord) { if (!record._id || !window.confirm(`Delete “${displayValue(record.title || record.name || 'this item')}”? This cannot be undone.`)) return; try { await request<{ok:boolean}>(`/admin/${section}/${record._id}`, token, { method: 'DELETE' }); setRecords(current => current.filter(item => item._id !== record._id)); } catch (cause) { setError(cause instanceof Error ? cause.message : 'Unable to delete this item.'); } }
+  async function login(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setLoading(true); setError(''); const data = new FormData(event.currentTarget); try { const result = await request<{ token: string; user: AdminUser }>('/auth/login', undefined, { method: 'POST', body: JSON.stringify({ email: data.get('email'), password: data.get('password') }) }); localStorage.setItem(tokenKey, result.token); setToken(result.token); setUser(result.user); } catch (cause) { setError(cause instanceof Error ? cause.message : 'Login failed.'); setLoading(false); } }
 
-  useEffect(() => {
-    if (!token) return;
-    request<{ user: AdminUser }>('/admin/session', token)
-      .then(({ user: activeUser }) => { setUser(activeUser); return loadSection(section, token); })
-      .catch(() => logout());
-  }, [token, logout, loadSection, section]);
-
-  async function login(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setLoading(true); setError('');
-    const data = new FormData(event.currentTarget);
-    try {
-      const result = await request<{ token: string; user: AdminUser }>('/auth/login', undefined, { method: 'POST', body: JSON.stringify({ email: data.get('email'), password: data.get('password') }) });
-      localStorage.setItem(tokenKey, result.token); setToken(result.token); setUser(result.user);
-    } catch (cause) { setError(cause instanceof Error ? cause.message : 'Login failed.'); setLoading(false); }
-  }
-
-  if (!token || !user) return <main className="admin-login-shell">
-    <section className="admin-login-card">
-      <a className="admin-brand" href="/"><span>ISPA</span><small>DIGITAL</small></a>
-      <div className="admin-login-icon"><ShieldCheck /></div>
-      <p className="eyebrow">SECURE ADMINISTRATION</p><h1>Welcome back.</h1><p>Sign in to manage enquiries and website content.</p>
-      <form onSubmit={login} className="admin-login-form">
-        <label>Email<input className="field" name="email" type="email" autoComplete="username" required /></label>
-        <label>Password<input className="field" name="password" type="password" minLength={12} autoComplete="current-password" required /></label>
-        {error && <p className="admin-error" role="alert">{error}</p>}
-        <button className="button button-primary" disabled={loading}>{loading ? 'Signing in…' : 'Sign in'}</button>
-      </form>
-      <a className="admin-back" href="/">← Back to website</a>
-    </section>
-  </main>;
-
+  if (!token || !user) return <main className="admin-login-shell"><section className="admin-login-card"><AdminBrand/><div className="admin-login-icon"><ShieldCheck /></div><p className="eyebrow">SECURE WORKSPACE</p><h1>Welcome back.</h1><p>Manage client enquiries, opportunities and website content from one place.</p><form onSubmit={login} className="admin-login-form"><label>Email address<input className="field" name="email" type="email" autoComplete="username" required /></label><label>Password<div className="password-field"><input className="field" name="password" type={showPassword ? 'text' : 'password'} minLength={12} autoComplete="current-password" required /><button type="button" aria-label={showPassword ? 'Hide password' : 'Show password'} onClick={() => setShowPassword(value => !value)}>{showPassword ? <EyeOff size={17}/> : <Eye size={17}/>}</button></div></label>{error && <p className="admin-error" role="alert">{error}</p>}<button className="button button-primary" disabled={loading}>{loading ? 'Signing in…' : 'Sign in securely'}</button></form><div className="admin-security-note"><ShieldCheck size={15}/> Protected administrative access</div><a className="admin-back" href="/">← Return to website</a></section></main>;
   const active = sections.find(item => item.id === section)!;
-  return <main className="admin-shell">
-    <aside className="admin-sidebar">
-      <a className="admin-brand" href="/"><span>ISPA</span><small>DIGITAL</small></a>
-      <nav>{sections.map(item => { const Icon = item.icon; return <button className={section === item.id ? 'active' : ''} key={item.id} onClick={() => setSection(item.id)}><Icon size={17}/>{item.label}</button>; })}</nav>
-      <button className="admin-logout" onClick={logout}><LogOut size={17}/> Sign out</button>
-    </aside>
-    <section className="admin-content">
-      <header><div><p className="eyebrow">ADMIN DASHBOARD</p><h1>{active.label}</h1><p>Signed in as {user.email}</p></div><button className="admin-refresh" onClick={() => loadSection(section)} disabled={loading}><RefreshCw className={loading ? 'spin' : ''} size={17}/> Refresh</button></header>
-      {error && <p className="admin-error" role="alert">{error}</p>}
-      {loading ? <div className="admin-empty">Loading {active.label.toLowerCase()}…</div> : records.length ? <div className="admin-records">{records.map((record, index) => <RecordCard key={record._id || index} record={record}/>)}</div> : <div className="admin-empty"><active.icon size={30}/><h2>No {active.label.toLowerCase()} yet</h2><p>New records will appear here automatically.</p></div>}
-    </section>
-  </main>;
+  return <main className="admin-shell"><aside className={`admin-sidebar ${menuOpen ? 'open' : ''}`}><div className="admin-sidebar-head"><AdminBrand/><button className="admin-menu-close" aria-label="Close menu" onClick={() => setMenuOpen(false)}><X/></button></div><p className="admin-nav-label">WORKSPACE</p><nav>{sections.map(item => { const Icon = item.icon; return <button className={section === item.id ? 'active' : ''} key={item.id} onClick={() => setSection(item.id)}><Icon size={17}/>{item.label}{item.id === section && records.length > 0 && <small>{records.length}</small>}</button>; })}</nav><div className="admin-profile"><span>{user.email.slice(0, 1).toUpperCase()}</span><div><strong>{user.role}</strong><small>{user.email}</small></div></div><button className="admin-logout" onClick={logout}><LogOut size={17}/> Sign out</button></aside>{menuOpen && <button className="admin-sidebar-scrim" aria-label="Close menu" onClick={() => setMenuOpen(false)}/>}<section className="admin-content"><header><button className="admin-menu-open" aria-label="Open menu" onClick={() => setMenuOpen(true)}><Menu/></button><div><p className="eyebrow">OPERATIONS CENTER</p><h1>{active.label}</h1><p>{lastUpdated ? `Updated ${new Intl.DateTimeFormat('en', { timeStyle: 'short' }).format(lastUpdated)}` : 'Your live business workspace'}</p></div><div className="admin-header-actions">{manageableSections.includes(section) && <button className="admin-create" onClick={() => setEditing('new')}><Plus size={17}/> New {active.singular}</button>}<button className="admin-refresh" onClick={() => loadSection(section)} disabled={loading}><RefreshCw className={loading ? 'spin' : ''} size={17}/> Refresh</button></div></header>
+    <div className="admin-metrics"><article><span><BarChart3 size={18}/></span><div><strong>{records.length}</strong><small>Total records</small></div></article><article><span><Inbox size={18}/></span><div><strong>{newCount}</strong><small>Needs attention</small></div></article><article><span><CheckCircle2 size={18}/></span><div><strong>{records.filter(record => ['reviewed','quoted','published','closed'].includes(record.status || '')).length}</strong><small>Progressed</small></div></article></div>
+    <div className="admin-toolbar"><label className="admin-search"><Search size={17}/><input value={query} onChange={event => setQuery(event.target.value)} placeholder={`Search ${active.label.toLowerCase()}…`} aria-label={`Search ${active.label}`} /></label><select value={statusFilter} onChange={event => setStatusFilter(event.target.value)} aria-label="Filter by status"><option value="all">All statuses</option>{[...new Set(records.map(record => record.status).filter(Boolean))].map(status => <option key={status} value={status}>{status}</option>)}</select><span>{filtered.length} {filtered.length === 1 ? active.singular : active.label.toLowerCase()}</span></div>
+    {error && <div className="admin-error admin-error-panel" role="alert"><strong>Unable to load data</strong><span>{error}</span><button onClick={() => loadSection(section)}>Try again</button></div>}{loading ? <div className="admin-empty"><RefreshCw className="spin"/><h2>Loading {active.label.toLowerCase()}</h2></div> : filtered.length ? <div className="admin-records">{filtered.map((record, index) => <RecordCard key={record._id || index} record={record} section={section} token={token} canDelete={user.role === 'admin'} onUpdated={updated => setRecords(current => current.map(record => record._id === updated._id ? updated : record))} onEdit={() => setEditing(record)} onDelete={() => deleteRecord(record)}/>)}</div> : <div className="admin-empty"><active.icon size={30}/><h2>{records.length ? 'No matching records' : `No ${active.label.toLowerCase()} yet`}</h2><p>{records.length ? 'Adjust your search or filter.' : 'New records will appear here automatically.'}</p></div>}</section>{editing && <ContentEditor section={section} record={editing === 'new' ? null : editing} token={token} onClose={() => setEditing(null)} onSaved={saved => setRecords(current => editing === 'new' ? [saved, ...current] : current.map(item => item._id === saved._id ? saved : item))}/>}</main>;
 }
